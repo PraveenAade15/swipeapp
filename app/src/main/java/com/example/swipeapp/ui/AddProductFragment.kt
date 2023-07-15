@@ -1,20 +1,12 @@
 package com.example.swipeapp.ui
 
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
-import android.content.ContentResolver
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.database.Cursor
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
-import android.provider.OpenableColumns
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -25,30 +17,22 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.swipeapp.R
 import com.example.swipeapp.databinding.FragmentAddProductBinding
-import com.example.swipeapp.models.SwipeAllProductResponse
 import com.example.swipeapp.utils.Constants.TAG
-import com.example.swipeapp.utils.NetworkResult
 import com.example.swipeapp.viewmodel.SwipeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import retrofit2.Response
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import kotlin.math.log
 
+/**
+ * Fragment for adding a product.
+ */
 @AndroidEntryPoint
 class AddProductFragment : Fragment() {
     private var _binding: FragmentAddProductBinding? = null
@@ -58,15 +42,20 @@ class AddProductFragment : Fragment() {
     private val PICK_FILES_REQUEST_CODE = 123
     var profileImageBody: MultipartBody.Part? = null
 
-
+    /**
+     * Creates the view for the fragment.
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentAddProductBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+    /**
+     * Initializes the view components and sets up listeners.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeProduct()
@@ -75,6 +64,9 @@ class AddProductFragment : Fragment() {
         setupSpinner()
     }
 
+    /**
+     * Observes the product and handles the add product button click event.
+     */
     private fun observeProduct() {
         binding.btnAddProduct.setOnClickListener {
             if (validateFields()) {
@@ -93,7 +85,6 @@ class AddProductFragment : Fragment() {
                             dialog()
                             binding.btnAddProduct.visibility = View.VISIBLE
                             binding.progressBar.visibility = View.GONE
-
                         } else {
                             Toast.makeText(
                                 requireContext(),
@@ -101,14 +92,15 @@ class AddProductFragment : Fragment() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-
                     }
                 }
             }
-
         }
     }
 
+    /**
+     * Sets up the spinner for selecting the product category.
+     */
     private fun setupSpinner() {
         val personNames =
             arrayOf("Select Category", "Service", "Books", "Food", "Product", "Electronics")
@@ -122,7 +114,7 @@ class AddProductFragment : Fragment() {
                 parent: AdapterView<*>,
                 view: View,
                 position: Int,
-                id: Long,
+                id: Long
             ) {
                 val item = parent.selectedItem
                 product_type = item.toString()
@@ -134,18 +126,21 @@ class AddProductFragment : Fragment() {
         }
     }
 
+    /**
+     * Handles the click event of the back button.
+     */
     private fun mvvmItemClick() {
         binding.backBtn.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) requireActivity().onBackPressed()
         }
-
     }
 
-
+    /**
+     * Handles the click event for selecting an image from the gallery.
+     */
     private fun validation() {
         binding.buttonfile.setOnClickListener {
-
             val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
             galleryIntent.type =
                 "image/*" // You can adjust the MIME type according to your requirements
@@ -160,6 +155,9 @@ class AddProductFragment : Fragment() {
         }
     }
 
+    /**
+     * Handles the result of selecting an image from the gallery.
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_FILES_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
@@ -188,6 +186,9 @@ class AddProductFragment : Fragment() {
         }
     }
 
+    /**
+     * Validates the input fields.
+     */
     private fun validateFields(): Boolean {
         val productName = binding.etProductName.text.toString().trim()
         val productPrice = binding.etProductPrice.text.toString().trim()
@@ -227,7 +228,9 @@ class AddProductFragment : Fragment() {
         return true
     }
 
-
+    /**
+     * Shows the success dialog.
+     */
     private fun dialog() {
         val dialog = Dialog(requireContext())
         //dialog.setCancelable(false)
@@ -243,11 +246,15 @@ class AddProductFragment : Fragment() {
         dialog.show()
     }
 
+    /**
+     * Clears the binding.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+
 
 
 

@@ -1,4 +1,4 @@
-package com.example.swipeapp.models
+package com.example.swipeapp.models.get
 
 import com.google.gson.annotations.SerializedName
 

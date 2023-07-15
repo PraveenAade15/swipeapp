@@ -4,37 +4,46 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.swipeapp.models.SwipeAllProductResponse
 import com.example.swipeapp.models.post.PostProduct
 import com.example.swipeapp.repository.SwipeRepository
-import com.example.swipeapp.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import retrofit2.Response
-import java.io.File
-import javax.inject.Inject
 
 @HiltViewModel
-class SwipeViewModel @Inject constructor(private val swipeRepository: SwipeRepository) : ViewModel() {
-
+/**
+ * ViewModel class responsible for managing data and network requests related to the Swipe feature.
+ */
+class SwipeViewModel(private val swipeRepository: SwipeRepository) : ViewModel() {
+    // Expose swipeLiveData from swipeRepository
     val swipeLiveData get() = swipeRepository.swipeLiveData
+
+    // Expose statusLiveData from swipeRepository
     val statusLiveData get() = swipeRepository.statusLiveData
 
+    // LiveData for add product response
+    private val _addProductResponse = MutableLiveData<Response<PostProduct>>()
+    val addProductResponse: LiveData<Response<PostProduct>> = _addProductResponse
+
+    /**
+     * Fetches all products.
+     */
     fun getAllProduct() {
         viewModelScope.launch {
             swipeRepository.getAllProduct()
         }
     }
-    val selectCropYear = MutableLiveData(arrayOf("Select Category", "Service", "Books", "Food", "Product", "Electronics"))
-//    fun addProduct(product_name:String,product_type:String,tax:Double,price:Double){
-//        viewModelScope.launch {
-//            swipeRepository.addProduct(product_name,product_type,tax,price)
-//        }
-//    }
-private val _addProductResponse = MutableLiveData<Response<PostProduct>>()
-    val addProductResponse: LiveData<Response<PostProduct>> = _addProductResponse
 
+    /**
+     * Adds a product.
+     *
+     * @param productName The name of the product to be added.
+     * @param productType The type of the product.
+     * @param price The price of the product.
+     * @param tax The tax for the product.
+     * @param image An optional image of the product.
+     */
     fun addProduct(
         productName: String,
         productType: String,
@@ -47,19 +56,4 @@ private val _addProductResponse = MutableLiveData<Response<PostProduct>>()
             _addProductResponse.value = response
         }
     }
-
-//    private val _addProductResult = MutableLiveData<NetworkResult<PostProduct?>>()
-//    val addProductResult: LiveData<NetworkResult<PostProduct?>> = _addProductResult
-//
-//    fun addProduct(
-//        productName: String,
-//        productType: String,
-//        price: Double,
-//        tax: Double,
-//        images: List<File>?
-//    ) {
-//        viewModelScope.launch {
-//            _addProductResult.value = swipeRepository.addProduct(productName, productType, price, tax, images)
-//        }
-//    }
 }

@@ -7,21 +7,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.swipeapp.R
 import com.example.swipeapp.databinding.FragmentListingProductBinding
-import com.example.swipeapp.models.SwipeAllProductResponse
+import com.example.swipeapp.models.get.SwipeAllProductResponse
 import com.example.swipeapp.utils.NetworkResult
 import com.example.swipeapp.viewmodel.SwipeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * Fragment for listing products.
+ */
 @AndroidEntryPoint
 class ListingProductFragment : Fragment() {
     private var _binding: FragmentListingProductBinding? = null
@@ -30,9 +30,12 @@ class ListingProductFragment : Fragment() {
     lateinit var swipeListOfProduct: SwipeListOfProductAdapter
     val filteredList = ArrayList<SwipeAllProductResponse>()
 
+    /**
+     * Creates the view for the fragment.
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentListingProductBinding.inflate(inflater, container, false)
         swipeViewModel.getAllProduct()
@@ -40,6 +43,9 @@ class ListingProductFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Initializes the view components and sets up listeners.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerView.layoutManager =
@@ -47,10 +53,11 @@ class ListingProductFragment : Fragment() {
         binding.recyclerView.adapter = swipeListOfProduct
         bindObservers()
         mvvmItemClick()
-
     }
 
-
+    /**
+     * Handles the click events.
+     */
     private fun mvvmItemClick() {
         binding.btnAddProduct.setOnClickListener {
             findNavController().navigate(R.id.action_listingProductFragment_to_addProductFragment)
@@ -73,10 +80,11 @@ class ListingProductFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {}
         })
-
     }
 
-
+    /**
+     * Binds the observers to observe the product data.
+     */
     private fun bindObservers() {
         swipeViewModel.swipeLiveData.observe(viewLifecycleOwner, Observer {
             when (it) {
@@ -93,33 +101,37 @@ class ListingProductFragment : Fragment() {
                         .show()
                     binding.shimmerFrameLayout.visibility = View.GONE
                     binding.clShimmerStart.visibility = View.VISIBLE
-
                 }
 
                 is NetworkResult.Loading -> {
                     binding.shimmerFrameLayout.isShimmerStarted
                     binding.clShimmerStart.visibility = View.GONE
-
                 }
             }
         })
     }
 
+    /**
+     * Resumes the fragment and starts the shimmer animation.
+     */
     override fun onResume() {
         super.onResume()
         binding.shimmerFrameLayout.isShimmerStarted
     }
 
+    /**
+     * Pauses the fragment and stops the shimmer animation.
+     */
     override fun onPause() {
         binding.shimmerFrameLayout.stopShimmer()
         super.onPause()
     }
 
-
+    /**
+     * Clears the binding.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }

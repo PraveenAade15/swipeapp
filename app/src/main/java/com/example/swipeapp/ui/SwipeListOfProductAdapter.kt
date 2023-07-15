@@ -7,9 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.swipeapp.R
 import com.example.swipeapp.databinding.ItemProductBinding
-import com.example.swipeapp.models.SwipeAllProductResponse
+import com.example.swipeapp.models.get.SwipeAllProductResponse
 
 
+/**
+ * RecyclerView adapter for displaying a list of products.
+ * @param context The context of the adapter.
+ */
 class SwipeListOfProductAdapter(private val context: Context) :
     RecyclerView.Adapter<SwipeListOfProductViewHolder>() {
 
@@ -20,6 +24,10 @@ class SwipeListOfProductAdapter(private val context: Context) :
         filteredDetails.addAll(details)
     }
 
+    /**
+     * Sets the list of products and updates the adapter.
+     * @param swipeResponse The list of products to display.
+     */
     fun setProductList(swipeResponse: List<SwipeAllProductResponse>) {
         details.clear()
         details.addAll(swipeResponse)
@@ -27,6 +35,10 @@ class SwipeListOfProductAdapter(private val context: Context) :
         notifyDataSetChanged()
     }
 
+    /**
+     * Filters the data based on the given query.
+     * @param query The query to filter the data.
+     */
     private fun filterData(query: String) {
         filteredDetails.clear()
         if (query.isBlank()) {
@@ -43,6 +55,9 @@ class SwipeListOfProductAdapter(private val context: Context) :
         }
     }
 
+    /**
+     * Creates a ViewHolder for the RecyclerView.
+     */
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -52,6 +67,9 @@ class SwipeListOfProductAdapter(private val context: Context) :
         return SwipeListOfProductViewHolder(binding)
     }
 
+    /**
+     * Binds the data to the ViewHolder.
+     */
     override fun onBindViewHolder(holder: SwipeListOfProductViewHolder, position: Int) {
         val detail = filteredDetails[position]
         holder.binding.apply {
@@ -68,15 +86,26 @@ class SwipeListOfProductAdapter(private val context: Context) :
         }
     }
 
+    /**
+     * Returns the number of items in the list.
+     */
     override fun getItemCount(): Int {
         return filteredDetails.size
     }
 
+    /**
+     * Filters the data based on the given query and updates the adapter.
+     * @param query The query to filter the data.
+     */
     fun filter(query: String) {
         filterData(query)
         notifyDataSetChanged()
     }
 }
 
+/**
+ * ViewHolder for the SwipeListOfProductAdapter.
+ * @param binding The ViewBinding for the item layout.
+ */
 class SwipeListOfProductViewHolder(val binding: ItemProductBinding) :
     RecyclerView.ViewHolder(binding.root)

@@ -13,10 +13,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 
+/**
+ * Dagger Hilt module that provides dependencies for network-related components.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    /**
+     * Provides a singleton instance of Retrofit.
+     */
     @Singleton
     @Provides
     fun providesRetrofit(): Retrofit {
@@ -25,64 +31,12 @@ object NetworkModule {
             .build()
     }
 
+    /**
+     * Provides an instance of the Swipe API service.
+     * @param retrofit The Retrofit instance.
+     */
     @Provides
-    fun providesTopHeadlinesApi(retrofit: Retrofit): Swipe {
+    fun providesSwipeApi(retrofit: Retrofit): Swipe {
         return retrofit.create(Swipe::class.java)
     }
-
-
 }
-//
-//@InstallIn(SingletonComponent::class)
-//@Module
-//class NetworkModule {
-//
-//    @Singleton
-//    @Provides
-//    fun providesRetrofit(): Retrofit.Builder {
-//        return Retrofit.Builder().baseUrl(Constants.BASE_URL)
-//            .addConverterFactory(GsonConverterFactory.create())
-//    }
-//
-//
-//
-//    @Singleton
-//    @Provides
-//    fun providesUserAPI(retrofitBuilder: Retrofit.Builder): Swipe {
-//        return retrofitBuilder.build().create(Swipe::class.java)
-//    }
-//
-//
-////    @Provides
-////    fun provideBaseUrl(): String = "https://app.getswipe.in/"
-////
-////    @Provides
-////    fun provideRetrofit(baseUrl: String): Retrofit {
-////        return Retrofit.Builder()
-////            .baseUrl(baseUrl)
-////            .addConverterFactory(GsonConverterFactory.create())
-////            .build()
-////    }
-////
-////    @Provides
-////    fun provideApiService(retrofit: Retrofit): Swipe {
-////        return retrofit.create(Swipe::class.java)
-////    }
-//
-////    @Singleton
-////    @Provides
-////    fun providesRetrofit(): Retrofit.Builder {
-////        return Retrofit.Builder().baseUrl(Constants.BASE_URL)
-////            .addConverterFactory(GsonConverterFactory.create())
-////    }
-////
-////    @Singleton
-////    @Provides
-////    fun providesUserAPI(retrofitBuilder: Retrofit.Builder): Swipe {
-////        return retrofitBuilder.build().create(Swipe::class.java)
-////    }
-//
-//
-//
-//
-//}
