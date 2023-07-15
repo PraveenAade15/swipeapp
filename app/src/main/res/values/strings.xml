@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SwipeApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="product_type">Product Type</string>
+    <string name="tax">Tax</string>
+    <string name="product_name">Product Name</string>
+</resources>
