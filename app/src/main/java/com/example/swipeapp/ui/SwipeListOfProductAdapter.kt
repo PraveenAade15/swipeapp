@@ -1,5 +1,6 @@
 package com.example.swipeapp.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -70,6 +71,7 @@ class SwipeListOfProductAdapter(private val context: Context) :
     /**
      * Binds the data to the ViewHolder.
      */
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: SwipeListOfProductViewHolder, position: Int) {
         val detail = filteredDetails[position]
         holder.binding.apply {
@@ -79,8 +81,9 @@ class SwipeListOfProductAdapter(private val context: Context) :
                 .placeholder(R.drawable.ic_swipe)
                 .thumbnail(0.5f)
                 .into(this.imageView)
-            this.tvProductName.text = "Product Name: ${detail.productName}"
-            this.tvProductType.text = "Product Type: ${detail.productType}"
+            val productName = detail.productName.toString().replace("\"", "")
+            this.tvProductName.text = "Product Name: $productName"
+            this.tvProductType.text = "Product Type: ${detail.productType.toString()}"
             this.tvPrice.text = "Price: ${detail.price.toString()}"
             this.tvTax.text = "Tax: ${detail.tax.toString()}"
         }

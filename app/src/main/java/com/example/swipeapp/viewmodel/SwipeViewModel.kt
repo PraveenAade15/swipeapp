@@ -10,12 +10,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import retrofit2.Response
+import javax.inject.Inject
 
-@HiltViewModel
+
 /**
  * ViewModel class responsible for managing data and network requests related to the Swipe feature.
  */
-class SwipeViewModel(private val swipeRepository: SwipeRepository) : ViewModel() {
+@HiltViewModel
+class SwipeViewModel @Inject constructor(private val swipeRepository: SwipeRepository) : ViewModel() {
     // Expose swipeLiveData from swipeRepository
     val swipeLiveData get() = swipeRepository.swipeLiveData
 
