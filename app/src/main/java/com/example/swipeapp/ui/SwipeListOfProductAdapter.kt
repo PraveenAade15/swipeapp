@@ -12,6 +12,7 @@ import com.example.swipeapp.models.get.SwipeAllProductResponse
 
 
 /**
+ * created by Praveen Aade
  * RecyclerView adapter for displaying a list of products.
  * @param context The context of the adapter.
  */

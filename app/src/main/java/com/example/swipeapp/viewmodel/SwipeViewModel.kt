@@ -1,14 +1,17 @@
 package com.example.swipeapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.swipeapp.models.post.PostProduct
 import com.example.swipeapp.repository.SwipeRepository
+import com.example.swipeapp.utils.Constants.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -47,13 +50,14 @@ class SwipeViewModel @Inject constructor(private val swipeRepository: SwipeRepos
      * @param image An optional image of the product.
      */
     fun addProduct(
-        productName: String,
-        productType: String,
-        price: String,
-        tax: String,
+        productName: RequestBody,
+        productType: RequestBody,
+        price: RequestBody,
+        tax: RequestBody,
         image: MultipartBody.Part?
     ) {
         viewModelScope.launch {
+            Log.d(TAG, "addProductGgbsxs: $image")
             val response = swipeRepository.addProduct(productName, productType, price, tax, image)
             _addProductResponse.value = response
         }

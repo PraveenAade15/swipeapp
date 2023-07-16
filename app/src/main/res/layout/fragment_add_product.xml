@@ -124,7 +124,7 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_large" />
 
-                <EditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etProductName"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -144,7 +144,7 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_large" />
 
-                <EditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etProductPrice"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -165,7 +165,7 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_large" />
 
-                <EditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etTaxrate"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -182,6 +182,7 @@
                     android:id="@+id/buttonfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAllCaps="false"
                     android:layout_marginTop="8dp"
                     android:text="Choose Image" />
 

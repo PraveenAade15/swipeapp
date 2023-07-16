@@ -1,12 +1,15 @@
 package com.example.swipeapp.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.swipeapp.api.Swipe
 import com.example.swipeapp.models.get.SwipeAllProductResponse
 import com.example.swipeapp.models.post.PostProduct
+import com.example.swipeapp.utils.Constants
 import com.example.swipeapp.utils.NetworkResult
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.json.JSONObject
 import retrofit2.Response
 import javax.inject.Inject
@@ -21,9 +24,10 @@ class SwipeRepository @Inject constructor(private val swipeAPI: Swipe){
     val statusLiveData get() = _statusLiveData
 
     // Live data for user responses
-    private val _userResponseLiveData = MutableLiveData<NetworkResult<SwipeAllProductResponse>>()
-    val userResponseLiveData: LiveData<NetworkResult<SwipeAllProductResponse>>
-        get() = _userResponseLiveData
+    private val _userResponseLiveData = MutableLiveData<Response<PostProduct>>()
+    val userResponseLiveData get() = _userResponseLiveData
+
+
     /**
      * Makes a network request to fetch all products.
      */
@@ -50,6 +54,7 @@ class SwipeRepository @Inject constructor(private val swipeAPI: Swipe){
 
 
 
+
     /**
      * Adds a product by making a network request.
      *
@@ -61,10 +66,10 @@ class SwipeRepository @Inject constructor(private val swipeAPI: Swipe){
      * @return The response containing the added product.
      */
     suspend fun addProduct(
-        productName: String,
-        productType: String,
-        price: String,
-        tax: String,
+        productName: RequestBody,
+        productType: RequestBody,
+        price: RequestBody,
+        tax: RequestBody,
         image: MultipartBody.Part?
     ): Response<PostProduct> {
         // Make a network request to add the product using the provided parameters

@@ -1,8 +1,10 @@
 package com.example.swipeapp.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,12 +17,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.swipeapp.R
 import com.example.swipeapp.databinding.FragmentListingProductBinding
 import com.example.swipeapp.models.get.SwipeAllProductResponse
+import com.example.swipeapp.utils.Constants
 import com.example.swipeapp.utils.NetworkResult
 import com.example.swipeapp.viewmodel.SwipeViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+import java.io.FileOutputStream
+import java.lang.Exception
 
 /**
  * Fragment for listing products.
+ * created by Praveen Aade
  */
 @AndroidEntryPoint
 class ListingProductFragment : Fragment() {
@@ -51,7 +62,12 @@ class ListingProductFragment : Fragment() {
         binding.recyclerView.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.adapter = swipeListOfProduct
-        bindObservers()
+        try {
+            bindObservers()
+        }catch (e:Exception){
+
+        }
+
         mvvmItemClick()
     }
 
@@ -118,6 +134,8 @@ class ListingProductFragment : Fragment() {
         super.onResume()
         binding.shimmerFrameLayout.isShimmerStarted
     }
+
+
 
     /**
      * Pauses the fragment and stops the shimmer animation.

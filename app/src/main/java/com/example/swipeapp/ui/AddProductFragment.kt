@@ -1,14 +1,15 @@
 package com.example.swipeapp.ui
 
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,21 +18,32 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.swipeapp.R
 import com.example.swipeapp.databinding.FragmentAddProductBinding
+import com.example.swipeapp.utils.Constants
 import com.example.swipeapp.utils.Constants.TAG
+import com.example.swipeapp.utils.NetworkResult
 import com.example.swipeapp.viewmodel.SwipeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.Response
+import java.io.File
+import java.io.FileOutputStream
+import java.lang.Exception
+
 
 /**
  * Fragment for adding a product.
+ * created by Praveen Aade
  */
 @AndroidEntryPoint
 class AddProductFragment : Fragment() {
@@ -69,17 +81,14 @@ class AddProductFragment : Fragment() {
      */
     private fun observeProduct() {
         binding.btnAddProduct.setOnClickListener {
-            if (validateFields()) {
                 if (validateFields()) {
                     binding.btnAddProduct.visibility = View.GONE
                     binding.progressBar.visibility = View.VISIBLE
-                    swipeViewModel.addProduct(
-                        binding.etProductName.text.toString(),
-                        product_type.toString(),
-                        binding.etProductPrice.text.toString(),
-                        binding.etTaxrate.text.toString(),
-                        profileImageBody
-                    )
+                    val productName = RequestBody.create("text/plain".toMediaTypeOrNull(), binding.etProductName.text.toString())
+                    val productType = RequestBody.create("text/plain".toMediaTypeOrNull(), product_type.toString())
+                    val price = RequestBody.create("text/plain".toMediaTypeOrNull(), binding.etProductPrice.text.toString())
+                    val tax = RequestBody.create("text/plain".toMediaTypeOrNull(), binding.etTaxrate.text.toString())
+                    val response = swipeViewModel.addProduct(productName, productType, price, tax, profileImageBody)
                     swipeViewModel.addProductResponse.observe(viewLifecycleOwner) { response ->
                         if (response.isSuccessful) {
                             dialog()
@@ -94,7 +103,7 @@ class AddProductFragment : Fragment() {
                         }
                     }
                 }
-            }
+
         }
     }
 
@@ -253,6 +262,54 @@ class AddProductFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+//    @SuppressLint("SuspiciousIndentation")
+//    private fun upload() {
+//        val filesDir = requireActivity().applicationContext.filesDir
+//        val file = File(filesDir, "image.png")
+//        if (imageUri !=null){
+//            try {
+//                val inputStream = requireContext().contentResolver.openInputStream(imageUri!!)
+//                val outputStream = FileOutputStream(file)
+//                inputStream!!.copyTo(outputStream)
+//                val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+//                profileImageBody  = MultipartBody.Part.createFormData("image", file.name, requestBody)
+//            }catch (e:Exception){
+//
+//            }
+//
+//        }else{
+//            Log.d(Constants.TAG, "upload: $imageUri")
+//            println()
+//        }
+//        Log.d(Constants.TAG, "uploadImage: $profileImageBody.")
+//        try {
+//            val productName = RequestBody.create("text/plain".toMediaTypeOrNull(), binding.etProductName.text.toString())
+//            val productType = RequestBody.create("text/plain".toMediaTypeOrNull(), product_type.toString())
+//            val price = RequestBody.create("text/plain".toMediaTypeOrNull(), binding.etProductPrice.text.toString())
+//            val tax = RequestBody.create("text/plain".toMediaTypeOrNull(), binding.etTaxrate.text.toString())
+//            val response = swipeViewModel.addProduct(productName, productType, price, tax, profileImageBody)
+//            swipeViewModel.addProductResponse.observe(viewLifecycleOwner) {
+//                if (it.isSuccessful) {
+//                    dialog()
+//                    binding.btnAddProduct.visibility = View.VISIBLE
+//                    binding.progressBar.visibility = View.GONE
+//                } else {
+//                    binding.btnAddProduct.visibility = View.VISIBLE
+//                    binding.progressBar.visibility = View.GONE
+//                    Toast.makeText(requireContext(), it.message(), Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//
+//        }catch (e:Exception){
+//            println()
+//
+//        }
+//
+//
+//
+//    }
 }
 
 
