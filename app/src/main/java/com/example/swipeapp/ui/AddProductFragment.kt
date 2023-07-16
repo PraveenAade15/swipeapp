@@ -109,19 +109,6 @@ class AddProductFragment : Fragment() {
         }
     }
 
-    private fun showNoInternetDialog() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("No Internet Connection")
-            .setMessage("Please check your internet connection and try again.")
-            .setPositiveButton("OK") { dialog: DialogInterface, _: Int ->
-                dialog.dismiss()
-                activity?.finish()
-            }
-
-        val dialog = builder.create()
-        dialog.show()
-    }
-
 
     /**
      * Sets up the spinner for selecting the product category.
@@ -279,53 +266,6 @@ class AddProductFragment : Fragment() {
         _binding = null
     }
 
-//    @SuppressLint("SuspiciousIndentation")
-//    private fun upload() {
-//        val filesDir = requireActivity().applicationContext.filesDir
-//        val file = File(filesDir, "image.png")
-//        if (imageUri !=null){
-//            try {
-//                val inputStream = requireContext().contentResolver.openInputStream(imageUri!!)
-//                val outputStream = FileOutputStream(file)
-//                inputStream!!.copyTo(outputStream)
-//                val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-//                profileImageBody  = MultipartBody.Part.createFormData("image", file.name, requestBody)
-//            }catch (e:Exception){
-//
-//            }
-//
-//        }else{
-//            Log.d(Constants.TAG, "upload: $imageUri")
-//            println()
-//        }
-//        Log.d(Constants.TAG, "uploadImage: $profileImageBody.")
-//        try {
-//            val productName = RequestBody.create("text/plain".toMediaTypeOrNull(), binding.etProductName.text.toString())
-//            val productType = RequestBody.create("text/plain".toMediaTypeOrNull(), product_type.toString())
-//            val price = RequestBody.create("text/plain".toMediaTypeOrNull(), binding.etProductPrice.text.toString())
-//            val tax = RequestBody.create("text/plain".toMediaTypeOrNull(), binding.etTaxrate.text.toString())
-//            val response = swipeViewModel.addProduct(productName, productType, price, tax, profileImageBody)
-//            swipeViewModel.addProductResponse.observe(viewLifecycleOwner) {
-//                if (it.isSuccessful) {
-//                    dialog()
-//                    binding.btnAddProduct.visibility = View.VISIBLE
-//                    binding.progressBar.visibility = View.GONE
-//                } else {
-//                    binding.btnAddProduct.visibility = View.VISIBLE
-//                    binding.progressBar.visibility = View.GONE
-//                    Toast.makeText(requireContext(), it.message(), Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//
-//
-//        }catch (e:Exception){
-//            println()
-//
-//        }
-//
-//
-//
-//    }
 }
 
 
