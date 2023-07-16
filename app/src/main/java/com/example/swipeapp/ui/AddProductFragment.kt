@@ -3,7 +3,9 @@ package com.example.swipeapp.ui
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -106,6 +108,20 @@ class AddProductFragment : Fragment() {
 
         }
     }
+
+    private fun showNoInternetDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("No Internet Connection")
+            .setMessage("Please check your internet connection and try again.")
+            .setPositiveButton("OK") { dialog: DialogInterface, _: Int ->
+                dialog.dismiss()
+                activity?.finish()
+            }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
+
 
     /**
      * Sets up the spinner for selecting the product category.

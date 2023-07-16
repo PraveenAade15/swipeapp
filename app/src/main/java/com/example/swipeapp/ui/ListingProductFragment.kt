@@ -1,6 +1,8 @@
 package com.example.swipeapp.ui
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -63,7 +65,12 @@ class ListingProductFragment : Fragment() {
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.adapter = swipeListOfProduct
         try {
-            bindObservers()
+            if (!Constants.isNetworkAvailable(requireContext())) {
+                showNoInternetDialog()
+            }else{
+                bindObservers()
+            }
+
         }catch (e:Exception){
 
         }
@@ -135,6 +142,18 @@ class ListingProductFragment : Fragment() {
         binding.shimmerFrameLayout.isShimmerStarted
     }
 
+    private fun showNoInternetDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("No Internet Connection")
+            .setMessage("Please check your internet connection and try again.")
+            .setPositiveButton("OK") { dialog: DialogInterface, _: Int ->
+                dialog.dismiss()
+                activity?.finish()
+            }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
 
 
     /**
